@@ -290,6 +290,48 @@ export const NAVIGATION_CONFIG = {
       options: {
         title: 'Profile'
       }
+    },
+    {
+      name: 'Notification',
+      component: 'Notification',
+      options: {
+        title: 'Notification'
+      }
+    },
+    {
+      name: 'Report',
+      component: 'Report',
+      options: {
+        title: 'Report'
+      }
+    },
+    {
+      name: 'WitnessReport',
+      component: 'WitnessReport',
+      options: {
+        title: 'Witness Report'
+      }
+    },
+    {
+      name: 'History',
+      component: 'History',
+      options: {
+        title: 'History'
+      }
+    },
+    {
+      name: 'Announcement',
+      component: 'Announcement',
+      options: {
+        title: 'Announcement'
+      }
+    },
+    {
+      name: 'EditProfile',
+      component: 'EditProfile',
+      options: {
+        title: 'Edit Profile'
+      }
     }
   ]
 };

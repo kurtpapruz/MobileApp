@@ -99,19 +99,19 @@ const Dashboard = ({ navigation }) => {
       
       {/* BOTTOM NAVIGATION WITH ASSETS ICONS */}
       <View style={styles.bottomNav}>
-        <TouchableOpacity style={styles.navIcon}>
+        <TouchableOpacity style={styles.navIcon} onPress={() => navigation.navigate('History')}>
           <Image source={require('../assets/history.png')} style={styles.navImg} />
         </TouchableOpacity>
-        <TouchableOpacity style={styles.navIcon}>
+        <TouchableOpacity style={styles.navIcon} onPress={() => navigation.navigate('Announcement')}>
           <Image source={require('../assets/announcement.png')} style={styles.navImg} />
         </TouchableOpacity>
-        <TouchableOpacity style={styles.navIcon}>
+        <TouchableOpacity style={styles.navIcon} onPress={() => navigation.navigate('Dashboard')}>
           <Image source={require('../assets/home.png')} style={styles.navImg} />
         </TouchableOpacity>
-        <TouchableOpacity style={styles.navIcon}>
+        <TouchableOpacity style={styles.navIcon} onPress={() => navigation.navigate('Report')}>
           <Image source={require('../assets/report.png')} style={styles.navImg} />
         </TouchableOpacity>
-        <TouchableOpacity style={styles.navIcon}>
+        <TouchableOpacity style={styles.navIcon} onPress={() => navigation.navigate('Notification')}>
           <Image source={require('../assets/notification.png')} style={styles.navImg} />
         </TouchableOpacity>
       </View>
@@ -234,7 +234,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#e53935',
     alignItems: 'center',
     justifyContent: 'center',
-    shadowColor: '#e53935',
+    shadowColor: '#6E120E',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.4,
     shadowRadius: 8,

@@ -6,6 +6,12 @@ import Login from './screens/Login';
 import Registration from './screens/Registration';
 import Dashboard from './screens/Dashboard';
 import Profile from './screens/Profile';
+import Notification from './screens/Notification';
+import Report from './screens/Report';
+import WitnessReport from './screens/WitnessReport';
+import History from './screens/History';
+import Announcement from './screens/Announcement';
+import EditProfile from './screens/EditProfile';
 import { NAVIGATION_CONFIG } from './utils/formConfig';
 
 export default function App() {
@@ -16,7 +22,13 @@ export default function App() {
     'Login': Login,
     'Registration': Registration,
     'Dashboard': Dashboard,
-    'Profile': Profile
+    'Profile': Profile,
+    'Notification': Notification,
+    'Report': Report,
+    'WitnessReport': WitnessReport,
+    'History': History,
+    'Announcement': Announcement,
+    'EditProfile': EditProfile
   };
 
   return (
