@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, ImageBackground, Platform, Dimensions, ScrollView } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import { Picker } from '@react-native-picker/picker';
-import { REGISTRATION_FORM_FIELDS, ID_OPTIONS, ACTION_BUTTONS, validateField, formatForBackend } from '../utils/formConfig';
+import { REGISTRATION_FORM_FIELDS, ID_OPTIONS, ACTION_BUTTONS, validateField } from '../../utils/formConfig';
 
 export default function Registration({ navigation }) {
   const [formData, setFormData] = useState({
@@ -24,8 +24,8 @@ export default function Registration({ navigation }) {
 
   const [errors, setErrors] = useState({});
 
-  const backgroundImage = require('../assets/background.jpg');
-  const logoImage = require('../assets/logo.jpg');
+  const backgroundImage = require('../../assets/background.jpg');
+  const logoImage = require('../../assets/logo.jpg');
 
   const handlePickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({

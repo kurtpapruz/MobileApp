@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image, ScrollView, Alert, TextInput } from 'react-native';
+import Header from '../Components/ResidentHeader/Header';
+import BottomNav from '../Components/ResidentHeader/BottomNav';
 
 const Profile = ({ navigation }) => {
-  const userAvatar = require('../assets/user.png');
-  const backButtonImg = require('../assets/backbutton.png');
+  const backButtonImg = require('../../assets/backbutton.png');
 
   // State for toggling password form
   const [showPasswordForm, setShowPasswordForm] = useState(false);
@@ -37,30 +38,29 @@ const Profile = ({ navigation }) => {
   };
 
   return (
-    <View style={{flex: 1, backgroundColor: '#f7f8fa'}}>
-      {/* HEADER */}
-      <View style={styles.header}>
-        <View style={styles.headerLeft}></View>
-        <TouchableOpacity style={styles.accountButton}>
-          <Image source={userAvatar} style={styles.avatar} />
-        </TouchableOpacity>
-      </View>
-      {/* Back Button and Profile Title under header */}
-      <View style={styles.profileTitleRow}>
+    <View style={styles.profileContainer}>
+      {/* Header */}
+      <Header navigation={navigation} />
+      
+      <View style={styles.titleContainer}>
         <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
-          <Image source={backButtonImg} style={styles.backButtonImg} />
+          <Image source={backButtonImg} style={styles.backButtonIcon} />
         </TouchableOpacity>
-        <Text style={styles.profileTitle}>Profile</Text>
+        <Text style={styles.title}>Profile</Text>
       </View>
-      <ScrollView contentContainerStyle={{ paddingBottom: 120 }}>
+      
+      <ScrollView style={styles.scrollContainer} showsVerticalScrollIndicator={false}>
         {/* First Container: Avatar, Name, Edit Profile */}
         <View style={styles.topContainer}>
-          <Image source={userAvatar} style={styles.profileAvatar} />
+          <View style={styles.profileAvatar}>
+            <Text style={styles.avatarText}>👤</Text>
+          </View>
           <Text style={styles.profileName}>User Name</Text>
           <TouchableOpacity onPress={() => navigation.navigate('EditProfile')}>
             <Text style={styles.editProfileText}>Edit Profile</Text>
           </TouchableOpacity>
         </View>
+        
         {/* Second Container: Basic Information or Password Form */}
         <View style={styles.infoContainer}>
           <View style={styles.infoHeader}>
@@ -69,15 +69,32 @@ const Profile = ({ navigation }) => {
           </View>
           
           {!showPasswordForm ? (
-            <>
-              <View style={styles.infoRow}><Text style={styles.infoLabel}>Full Name:</Text></View>
-              <View style={styles.infoRow}><Text style={styles.infoLabel}>Address:</Text></View>
-              <View style={styles.infoRow}><Text style={styles.infoLabel}>User ID:</Text></View>
-              <View style={styles.infoRow}><Text style={styles.infoLabel}>Email:</Text></View>
-              <View style={styles.infoRow}><Text style={styles.infoLabel}>Phone:</Text></View>
-              <View style={styles.infoRow}><Text style={styles.infoLabel}>Age:</Text></View>
-          
-            </>
+            <View style={styles.infoContent}>
+              <View style={styles.infoRow}>
+                <Text style={styles.infoLabel}>Full Name:</Text>
+                <Text style={styles.infoValue}>-</Text>
+              </View>
+              <View style={styles.infoRow}>
+                <Text style={styles.infoLabel}>Address:</Text>
+                <Text style={styles.infoValue}>-</Text>
+              </View>
+              <View style={styles.infoRow}>
+                <Text style={styles.infoLabel}>User ID:</Text>
+                <Text style={styles.infoValue}>-</Text>
+              </View>
+              <View style={styles.infoRow}>
+                <Text style={styles.infoLabel}>Email:</Text>
+                <Text style={styles.infoValue}>-</Text>
+              </View>
+              <View style={styles.infoRow}>
+                <Text style={styles.infoLabel}>Phone:</Text>
+                <Text style={styles.infoValue}>-</Text>
+              </View>
+              <View style={styles.infoRow}>
+                <Text style={styles.infoLabel}>Age:</Text>
+                <Text style={styles.infoValue}>-</Text>
+              </View>
+            </View>
           ) : (
             <View style={styles.passwordFormContainer}>
               <Text style={styles.resetPasswordTitle}>Reset Password</Text>
@@ -88,6 +105,7 @@ const Profile = ({ navigation }) => {
                 onChangeText={setCurrentPassword}
                 placeholder="Current Password"
                 secureTextEntry
+                placeholderTextColor="#999"
               />
               <Text style={styles.label}>New Password:</Text>
               <TextInput
@@ -96,6 +114,7 @@ const Profile = ({ navigation }) => {
                 onChangeText={setNewPassword}
                 placeholder="New Password"
                 secureTextEntry
+                placeholderTextColor="#999"
               />
               <Text style={styles.label}>Confirm Password:</Text>
               <TextInput
@@ -104,6 +123,7 @@ const Profile = ({ navigation }) => {
                 onChangeText={setConfirmPassword}
                 placeholder="Confirm Password"
                 secureTextEntry
+                placeholderTextColor="#999"
               />
               <TouchableOpacity style={styles.saveBtn} onPress={handlePasswordUpdate}>
                 <Text style={styles.saveBtnText}>Confirm</Text>
@@ -114,86 +134,57 @@ const Profile = ({ navigation }) => {
             </View>
           )}
         </View>
+        
         {/* Show Change Password and Logout buttons only when not in password form */}
         {!showPasswordForm && (
-          <>
+          <View style={styles.actionButtons}>
             <TouchableOpacity style={styles.changePasswordBtn} onPress={() => setShowPasswordForm(true)}>
               <Text style={styles.changePasswordText}>Change Password</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.logoutBtn} onPress={handleLogout}>
               <Text style={styles.logoutText}>Log out</Text>
             </TouchableOpacity>
-          </>
+          </View>
         )}
-        {/* When in password form, only show Confirm and Cancel (already handled above) */}
       </ScrollView>
-      {/* BOTTOM NAVIGATION */}
-      <View style={styles.bottomNav}>
-        <TouchableOpacity style={styles.navIcon} onPress={() => navigation.navigate('History')}>
-          <Image source={require('../assets/history.png')} style={styles.navImg} />
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.navIcon} onPress={() => navigation.navigate('Announcement')}>
-          <Image source={require('../assets/announcement.png')} style={styles.navImg} />
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.navIcon} onPress={() => navigation.navigate('Dashboard')}>
-          <Image source={require('../assets/home.png')} style={styles.navImg} />
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.navIcon} onPress={() => navigation.navigate('Report')}>
-          <Image source={require('../assets/report.png')} style={styles.navImg} />
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.navIcon} onPress={() => navigation.navigate('Notification')}>
-          <Image source={require('../assets/notification.png')} style={styles.navImg} />
-        </TouchableOpacity>
-      </View>
+      
+      {/* Bottom Navigation */}
+      <BottomNav navigation={navigation} />
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    backgroundColor: '#1041BC',
-    paddingTop: 40,
-    paddingHorizontal: 16,
-    paddingBottom: 16,
-    borderBottomWidth: 1,
-    borderBottomColor: '#eee',
-  },
-  headerLeft: {
+  profileContainer: {
     flex: 1,
+    backgroundColor: '#f7f8fa',
+    position: 'relative',
   },
-  accountButton: {
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  avatar: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    borderColor: '#eee',
-  },
-  profileTitleRow: {
+  titleContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginTop: 18,
-    marginBottom: 12,
+    marginTop: 20,
+    marginBottom: 16,
     marginLeft: 16,
   },
   backButton: {
     marginRight: 8,
     padding: 4,
   },
-  backButtonImg: {
+  backButtonIcon: {
     width: 28,
     height: 28,
     resizeMode: 'contain',
   },
-  profileTitle: {
+  title: {
     fontSize: 24,
     fontWeight: 'bold',
     color: '#111',
+    margin: 0,
+  },
+  scrollContainer: {
+    flex: 1,
+    paddingBottom: 90,
   },
   topContainer: {
     backgroundColor: '#fff',
@@ -210,12 +201,21 @@ const styles = StyleSheet.create({
     height: 80,
     borderRadius: 40,
     marginBottom: 8,
+    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 2,
+    borderColor: '#eee',
+  },
+  avatarText: {
+    fontSize: 48,
   },
   profileName: {
     fontSize: 18,
     fontWeight: 'bold',
     color: '#222',
     marginBottom: 2,
+    margin: 0,
   },
   editProfileText: {
     color: '#1041BC',
@@ -255,6 +255,9 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 15,
   },
+  infoContent: {
+    // Container for info rows
+  },
   infoRow: {
     flexDirection: 'row',
     marginBottom: 8,
@@ -263,70 +266,18 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#222',
     width: 90,
+    flexShrink: 0,
   },
   infoValue: {
     color: '#222',
     flex: 1,
     flexWrap: 'wrap',
   },
-  changePasswordBtn: {
-    backgroundColor: '#2ecc40',
-    marginHorizontal: 16,
-    marginTop: 24,
-    borderRadius: 8,
-    alignItems: 'center',
-    paddingVertical: 12,
-  },
-  changePasswordText: {
-    color: '#fff',
-    fontWeight: 'bold',
-    fontSize: 16,
-  },
-  logoutBtn: {
-    backgroundColor: '#e53935',
-    marginHorizontal: 16,
-    marginTop: 14,
-    borderRadius: 8,
-    alignItems: 'center',
-    paddingVertical: 12,
-    marginBottom: 24,
-  },
-  logoutText: {
-    color: '#fff',
-    fontWeight: 'bold',
-    fontSize: 16,
-  },
-  bottomNav: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    alignItems: 'center',
-    backgroundColor: '#1041BC',
-    borderTopLeftRadius: 18,
-    borderTopRightRadius: 18,
-    height: 60,
-    borderTopWidth: 1,
-    borderTopColor: '#eee',
-    position: 'absolute',
-    left: 0,
-    right: 0,
-    bottom: 0,
-    paddingHorizontal: 16,
-    zIndex: 10,
-  },
-  navIcon: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    flex: 1,
-  },
-  navImg: {
-    width: 24,
-    height: 24,
-    resizeMode: 'contain',
-  },
   passwordFormContainer: {
     padding: 16,
     backgroundColor: '#fff',
     borderRadius: 10,
+    borderWidth: 1,
     borderColor: '#b3c6e0',
     marginTop: 4,
   },
@@ -335,6 +286,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     textAlign: 'center',
     marginBottom: 16,
+    margin: 0,
   },
   label: {
     fontWeight: 'bold',
@@ -359,6 +311,7 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     marginTop: 8,
     marginBottom: 8,
+    alignItems: 'center',
   },
   saveBtnText: {
     color: '#fff',
@@ -372,12 +325,41 @@ const styles = StyleSheet.create({
     paddingHorizontal: 36,
     paddingVertical: 12,
     marginBottom: 8,
+    alignItems: 'center',
   },
   cancelBtnText: {
     color: '#fff',
     fontWeight: 'bold',
     fontSize: 17,
     textAlign: 'center',
+  },
+  actionButtons: {
+    marginHorizontal: 16,
+    marginTop: 24,
+    marginBottom: 24,
+  },
+  changePasswordBtn: {
+    backgroundColor: '#2ecc40',
+    borderRadius: 8,
+    alignItems: 'center',
+    paddingVertical: 12,
+    marginBottom: 14,
+  },
+  changePasswordText: {
+    color: '#fff',
+    fontWeight: 'bold',
+    fontSize: 16,
+  },
+  logoutBtn: {
+    backgroundColor: '#e53935',
+    borderRadius: 8,
+    alignItems: 'center',
+    paddingVertical: 12,
+  },
+  logoutText: {
+    color: '#fff',
+    fontWeight: 'bold',
+    fontSize: 16,
   },
 });
 

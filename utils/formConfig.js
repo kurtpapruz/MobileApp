@@ -332,6 +332,41 @@ export const NAVIGATION_CONFIG = {
       options: {
         title: 'Edit Profile'
       }
+    },
+    {
+      name: 'Call',
+      component: 'Call',
+      options: {
+        title: 'Emergency Call'
+      }
+    },
+    {
+      name: 'Waiting',
+      component: 'Waiting',
+      options: {
+        title: 'Waiting'
+      }
+    },
+    {
+      name: 'Arrived',
+      component: 'Arrived',
+      options: {
+        title: 'Responder Arrived'
+      }
+    },
+    {
+      name: 'Complete',
+      component: 'Complete',
+      options: {
+        title: 'Emergency Complete'
+      }
+    },
+    {
+      name: 'EmergencyTips',
+      component: 'EmergencyTips',
+      options: {
+        title: 'Emergency Tips'
+      }
     }
   ]
 };

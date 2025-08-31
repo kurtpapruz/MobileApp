@@ -1,45 +1,56 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image, FlatList, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
+import Header from '../Components/ResidentHeader/Header';
+import BottomNav from '../Components/ResidentHeader/BottomNav';
 
 const Dashboard = ({ navigation }) => {
   const [data] = useState({
     user: {
       name: '',
       address: '',
-      avatar: require('../assets/user.png'),
+      avatar: null,
     },
     emergencyTips: 'Show',
     publicAnnouncements: [],
     recentReports: [],
   });
 
+  // Handle SOS button click
+  const handleSOSClick = () => {
+    navigation.navigate('Call', {
+      incidentType: 'Emergency',
+      fromSOS: true
+    });
+  };
+
   return (
-    <View style={{flex: 1, backgroundColor: '#f7f8fa'}}>
-      {/* CLEAN HEADER - ACCOUNT BUTTON ONLY */}
-      <View style={styles.header}>
-        <View style={styles.headerLeft}></View>
-        <TouchableOpacity style={styles.accountButton} onPress={() => navigation.navigate('Profile')}>
-          <Image source={data.user.avatar} style={styles.avatar} />
-        </TouchableOpacity>
-      </View>
+    <View style={styles.dashboardContainer}>
+      {/* Header */}
+      <Header navigation={navigation} />
       
-      <ScrollView style={{flex: 1}} contentContainerStyle={{paddingBottom: 90}}>
+      <ScrollView style={styles.scrollView}>
         {/* User Info Section */}
         <View style={styles.userInfoSection}>
-          <Text style={styles.welcome}>Welcome back!</Text>
-          <Text style={styles.name}>{data.user.name || 'User Name'}</Text>
-          <Text style={styles.address}>{data.user.address || 'User Address'}</Text>
-          <TouchableOpacity style={styles.tipsButton}>
-            <Text style={styles.tipsButtonText}>Emergency Tips</Text>
-            <View style={styles.tipsShowButton}><Text style={styles.tipsShowButtonText}>Show</Text></View>
-          </TouchableOpacity>
+          <View style={styles.leftSide}>
+            <Text style={styles.welcome}>Welcome back!</Text>
+            <Text style={styles.name}>{data.user.name || ''}</Text>
+            <Text style={styles.address}>{data.user.address || ''}</Text>
+          </View>
+          <View style={styles.rightSide}>
+            <TouchableOpacity style={styles.tipsButton} onPress={() => navigation.navigate('EmergencyTips')}>
+              <Text style={styles.tipsButtonText}>Emergency Tips</Text>
+              <View style={styles.tipsShowButton}>
+                <Text style={styles.tipsShowButtonText}>Show</Text>
+              </View>
+            </TouchableOpacity>
+          </View>
         </View>
 
         {/* SOS Section */}
         <View style={styles.sosSection}>
           <Text style={styles.sosTitle}>Are you in an Emergency?</Text>
           <Text style={styles.sosSubtitle}>Press the button to report an emergency.</Text>
-          <TouchableOpacity style={styles.sosButton}>
+          <TouchableOpacity style={styles.sosButton} onPress={handleSOSClick}>
             <View style={styles.sosOuterCircle}>
               <View style={styles.sosInnerCircle}>
                 <Text style={styles.sosText}>SOS</Text>
@@ -51,19 +62,16 @@ const Dashboard = ({ navigation }) => {
         {/* Public Announcements */}
         <Text style={styles.sectionTitle}>Public Announcement</Text>
         {data.publicAnnouncements.length > 0 ? (
-          <FlatList
-            data={data.publicAnnouncements}
-            keyExtractor={item => item.id}
-            renderItem={({ item }) => (
-              <View style={styles.announcementCard}>
+          <View style={styles.announcementsList}>
+            {data.publicAnnouncements.map((item) => (
+              <View style={styles.announcementCard} key={item.id}>
                 <Text style={styles.announcementText}>{item.message}</Text>
                 <TouchableOpacity style={styles.announcementButton}>
                   <Text style={styles.announcementButtonText}>{item.button}</Text>
                 </TouchableOpacity>
               </View>
-            )}
-            scrollEnabled={false}
-          />
+            ))}
+          </View>
         ) : (
           <View style={styles.emptyCard}>
             <Text style={styles.emptyText}>No announcements available</Text>
@@ -73,23 +81,22 @@ const Dashboard = ({ navigation }) => {
         {/* Recent Reports */}
         <Text style={styles.sectionTitle}>My Recent Report</Text>
         {data.recentReports.length > 0 ? (
-          <FlatList
-            data={data.recentReports}
-            keyExtractor={item => item.id}
-            renderItem={({ item }) => (
-              <View style={styles.reportCard}>
-                <View style={{ flex: 1 }}>
+          <View style={styles.reportsList}>
+            {data.recentReports.map((item) => (
+              <View style={styles.reportCard} key={item.id}>
+                <View style={styles.reportInfo}>
                   <Text style={styles.reportDate}>{item.date}</Text>
-                  <Text style={styles.reportType}>Incident Type : <Text style={{ fontWeight: 'bold' }}>{item.type}</Text></Text>
+                  <Text style={styles.reportType}>
+                    Incident Type : <Text style={{ fontWeight: 'bold' }}>{item.type}</Text>
+                  </Text>
                   <Text style={styles.reportLocation}>{item.location}</Text>
                 </View>
                 <View style={styles.reportStatusContainer}>
                   <Text style={styles.reportStatus}>{item.status}</Text>
                 </View>
               </View>
-            )}
-            scrollEnabled={false}
-          />
+            ))}
+          </View>
         ) : (
           <View style={styles.emptyCard}>
             <Text style={styles.emptyText}>No recent reports</Text>
@@ -97,63 +104,35 @@ const Dashboard = ({ navigation }) => {
         )}
       </ScrollView>
       
-      {/* BOTTOM NAVIGATION WITH ASSETS ICONS */}
-      <View style={styles.bottomNav}>
-        <TouchableOpacity style={styles.navIcon} onPress={() => navigation.navigate('History')}>
-          <Image source={require('../assets/history.png')} style={styles.navImg} />
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.navIcon} onPress={() => navigation.navigate('Announcement')}>
-          <Image source={require('../assets/announcement.png')} style={styles.navImg} />
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.navIcon} onPress={() => navigation.navigate('Dashboard')}>
-          <Image source={require('../assets/home.png')} style={styles.navImg} />
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.navIcon} onPress={() => navigation.navigate('Report')}>
-          <Image source={require('../assets/report.png')} style={styles.navImg} />
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.navIcon} onPress={() => navigation.navigate('Notification')}>
-          <Image source={require('../assets/notification.png')} style={styles.navImg} />
-        </TouchableOpacity>
-      </View>
+      {/* Bottom Navigation */}
+      <BottomNav navigation={navigation} />
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    backgroundColor: '#1041BC',
-    paddingTop: 40,
-    paddingHorizontal: 16,
-    paddingBottom: 16,
-    borderBottomWidth: 1,
-    borderBottomColor: '#eee',
-  },
-  headerLeft: {
+  dashboardContainer: {
     flex: 1,
+    backgroundColor: '#f7f8fa',
   },
-  appTitle: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: '#222',
-  },
-  accountButton: {
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  avatar: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    borderColor: '#eee',
+  scrollView: {
+    flex: 1,
+    paddingBottom: 90,
   },
   userInfoSection: {
     backgroundColor: '#fff',
     paddingHorizontal: 16,
     paddingVertical: 16,
     marginBottom: 8,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  leftSide: {
+    flex: 1,
+  },
+  rightSide: {
+    alignItems: 'flex-end',
   },
   welcome: {
     fontSize: 18,
@@ -254,6 +233,9 @@ const styles = StyleSheet.create({
     color: '#222',
     marginLeft: 16,
   },
+  announcementsList: {
+    marginHorizontal: 16,
+  },
   announcementCard: {
     backgroundColor: '#fff',
     borderRadius: 12,
@@ -262,7 +244,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     padding: 12,
-    marginHorizontal: 16,
     marginBottom: 8,
   },
   announcementText: {
@@ -281,6 +262,9 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 14,
   },
+  reportsList: {
+    marginHorizontal: 16,
+  },
   reportCard: {
     backgroundColor: '#fff',
     borderRadius: 12,
@@ -289,8 +273,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     padding: 12,
-    marginHorizontal: 16,
     marginBottom: 8,
+  },
+  reportInfo: {
+    flex: 1,
   },
   reportDate: {
     color: '#222',
@@ -332,33 +318,6 @@ const styles = StyleSheet.create({
   emptyText: {
     color: '#888',
     fontSize: 14,
-  },
-  bottomNav: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    alignItems: 'center',
-    backgroundColor: '#1041BC',
-    borderTopLeftRadius: 18,
-    borderTopRightRadius: 18,
-    height: 60,
-    borderTopWidth: 1,
-    borderTopColor: '#eee',
-    position: 'absolute',
-    left: 0,
-    right: 0,
-    bottom: 0,
-    paddingHorizontal: 16,
-    zIndex: 10,
-  },
-  navIcon: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    flex: 1,
-  },
-  navImg: {
-    width: 24,
-    height: 24,
-    resizeMode: 'contain',
   },
 });
 

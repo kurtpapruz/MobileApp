@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, ImageBackground, Linking } from 'react-native';
-import { LOGIN_FORM_FIELDS, ACTION_BUTTONS, validateField, formatForBackend } from '../utils/formConfig';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, ImageBackground, Alert } from 'react-native';
+import { LOGIN_FORM_FIELDS, ACTION_BUTTONS, validateField } from '../../utils/formConfig';
 
 export default function Login({ navigation }) {
   const [formData, setFormData] = useState({
@@ -9,6 +9,7 @@ export default function Login({ navigation }) {
   });
 
   const [errors, setErrors] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
 
   // Handle form input changes
   const handleInputChange = (key, value) => {
@@ -43,16 +44,37 @@ export default function Login({ navigation }) {
       return;
     }
 
-    // Backend/API logic removed. You can add local success logic here if needed.
-    // Example: set a local success message or navigate to another screen.
-    // For now, just log success and navigate to Dashboard.
-    console.log('Login successful (local only).');
-    navigation.navigate('Dashboard');
+    setIsLoading(true);
+
+    // Simulate loading
+    setTimeout(() => {
+      setIsLoading(false);
+      
+      // Simple frontend-only login logic
+      if (formData.email && formData.password) {
+        Alert.alert(
+          'Login Successful',
+          'Welcome! You have successfully logged in.',
+          [
+            {
+              text: 'OK',
+              onPress: () => navigation.navigate('Dashboard')
+            }
+          ]
+        );
+      } else {
+        Alert.alert(
+          'Login Failed',
+          'Please enter valid email and password.',
+          [{ text: 'OK' }]
+        );
+      }
+    }, 1000);
   };
 
   // Placeholder background image (use your own if available)
-  const backgroundImage = require('../assets/background.jpg');
-  const logoImage = require('../assets/logo.jpg');
+  const backgroundImage = require('../../assets/background.jpg');
+  const logoImage = require('../../assets/logo.jpg');
 
   return (
     <ImageBackground source={backgroundImage} style={styles.background} resizeMode="cover">
@@ -60,7 +82,6 @@ export default function Login({ navigation }) {
         <Image source={logoImage} style={styles.logo} />
         <View style={styles.formContainer}>
           <Text style={styles.title}>LOGIN</Text>
-          
           
           {LOGIN_FORM_FIELDS.map((field) => (
             <View key={field.key} style={styles.fieldContainer}>
@@ -73,6 +94,7 @@ export default function Login({ navigation }) {
                 keyboardType={field.keyboardType}
                 autoCapitalize={field.autoCapitalize}
                 secureTextEntry={field.secureTextEntry}
+                editable={!isLoading}
               />
               {errors[field.key] && (
                 <Text style={styles.errorText}>{errors[field.key]}</Text>
@@ -85,24 +107,35 @@ export default function Login({ navigation }) {
               key={button.key}
               style={[
                 styles.button,
-                button.style === 'primary' ? styles.primaryButton : styles.textButton
+                button.style === 'primary' ? styles.primaryButton : styles.textButton,
+                isLoading && styles.disabledButton
               ]}
               onPress={button.key === 'login' ? handleSubmit : button.onPress}
+              disabled={isLoading}
             >
               <Text style={[
                 styles.buttonText,
-                button.style === 'primary' ? styles.primaryButtonText : styles.textButtonText
+                button.style === 'primary' ? styles.primaryButtonText : styles.textButtonText,
+                isLoading && styles.disabledButtonText
               ]}>
-                {button.text}
+                {isLoading ? 'Logging in...' : button.text}
               </Text>
             </TouchableOpacity>
           ))}
 
           <View style={styles.signupContainer}>
-            <Text style={styles.signupText}>Dont have an account yet?</Text>
-            <TouchableOpacity onPress={() => navigation.navigate('Registration')}>
-              <Text style={styles.signupLink}> Sign In</Text>
+            <Text style={styles.signupText}>Don't have an account yet?</Text>
+            <TouchableOpacity onPress={() => navigation.navigate('Registration')} disabled={isLoading}>
+              <Text style={styles.signupLink}> Sign Up</Text>
             </TouchableOpacity>
+          </View>
+
+          {/* Frontend Only Notice */}
+          <View style={styles.frontendNoticeContainer}>
+            <Text style={styles.frontendNoticeTitle}>Frontend Only</Text>
+            <Text style={styles.frontendNoticeText}>
+              This is a frontend-only login form. No backend integration required.
+            </Text>
           </View>
         </View>
       </View>
@@ -187,6 +220,9 @@ const styles = StyleSheet.create({
   primaryButton: {
     backgroundColor: '#0a2c6b',
   },
+  disabledButton: {
+    backgroundColor: '#ccc',
+  },
   textButton: {
     backgroundColor: 'transparent',
     alignSelf: 'flex-start',
@@ -200,6 +236,9 @@ const styles = StyleSheet.create({
   },
   primaryButtonText: {
     color: '#fff',
+  },
+  disabledButtonText: {
+    color: '#666',
   },
   textButtonText: {
     color: '#222',
@@ -220,4 +259,27 @@ const styles = StyleSheet.create({
     fontSize: 14,
     textDecorationLine: 'underline',
   },
+  frontendNoticeContainer: {
+    marginTop: 20,
+    padding: 15,
+    backgroundColor: 'rgba(76, 175, 80, 0.1)',
+    borderRadius: 10,
+    width: '100%',
+    borderWidth: 1,
+    borderColor: 'rgba(76, 175, 80, 0.3)',
+  },
+  frontendNoticeTitle: {
+    fontSize: 14,
+    fontWeight: 'bold',
+    color: '#2e7d32',
+    marginBottom: 8,
+    textAlign: 'center',
+  },
+  frontendNoticeText: {
+    fontSize: 12,
+    color: '#2e7d32',
+    textAlign: 'center',
+    lineHeight: 16,
+  },
 });
+

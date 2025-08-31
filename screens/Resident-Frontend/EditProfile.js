@@ -1,9 +1,13 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image, ScrollView, TextInput } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Image, ScrollView, TextInput, Dimensions } from 'react-native';
+import Header from '../Components/ResidentHeader/Header';
+import BottomNav from '../Components/ResidentHeader/BottomNav';
+
+const { width } = Dimensions.get('window');
 
 const EditProfile = ({ navigation }) => {
-  const userAvatar = require('../assets/user.png');
-  const backButtonImg = require('../assets/backbutton.png');
+  const userAvatar = require('../../assets/user.png');
+  const backButtonImg = require('../../assets/backbutton.png');
 
   // State for form fields (empty, backend-ready)
   const [fullName, setFullName] = useState('');
@@ -20,15 +24,11 @@ const EditProfile = ({ navigation }) => {
   };
 
   return (
-    <View style={{flex: 1, backgroundColor: '#f7f8fa'}}>
-      {/* HEADER (avatar only) */}
-      <View style={styles.header}>
-        <View style={styles.headerLeft}></View>
-        <TouchableOpacity style={styles.accountButton} onPress={() => navigation.navigate('Profile')}>
-          <Image source={userAvatar} style={styles.avatar} />
-        </TouchableOpacity>
-      </View>
-      <ScrollView contentContainerStyle={{paddingBottom: 120}} showsVerticalScrollIndicator={false}>
+    <View style={styles.editProfileContainer}>
+      {/* Header */}
+      <Header navigation={navigation} />
+      
+      <ScrollView style={styles.scrollContainer} showsVerticalScrollIndicator={true}>
         {/* Title row with back button and Edit Profile text */}
         <View style={styles.titleRow}>
           <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
@@ -36,14 +36,18 @@ const EditProfile = ({ navigation }) => {
           </TouchableOpacity>
           <Text style={styles.title}>Edit Profile</Text>
         </View>
+        
         {/* Avatar Card */}
         <View style={styles.avatarCard}>
-          <Image source={userAvatar} style={styles.profileAvatar} />
+          <View style={styles.profileAvatar}>
+            <Image source={userAvatar} style={styles.avatarImage} />
+          </View>
           <Text style={styles.profileName}>{fullName || ' '}</Text>
           <TouchableOpacity style={styles.changePhotoBtn}>
             <Text style={styles.changePhotoText}>Change Photo</Text>
           </TouchableOpacity>
         </View>
+        
         {/* Form Fields */}
         <View style={styles.formGroup}>
           <Text style={styles.label}>Full Name:</Text>
@@ -81,8 +85,8 @@ const EditProfile = ({ navigation }) => {
             autoCapitalize="none"
           />
 
-          <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-            <View style={{flex: 1, marginRight: 8}}>
+          <View style={styles.phoneAgeRow}>
+            <View style={styles.phoneField}>
               <Text style={styles.label}>Phone:</Text>
               <TextInput
                 style={styles.input}
@@ -92,7 +96,7 @@ const EditProfile = ({ navigation }) => {
                 keyboardType="phone-pad"
               />
             </View>
-            <View style={{width: 80}}>
+            <View style={styles.ageField}>
               <Text style={styles.label}>Age:</Text>
               <TextInput
                 style={styles.input}
@@ -104,69 +108,40 @@ const EditProfile = ({ navigation }) => {
             </View>
           </View>
         </View>
+        
         {/* Buttons */}
         <View style={styles.buttonRow}>
-          <TouchableOpacity style={styles.cancelBtn} onPress={() => navigation.goBack()}>
-            <Text style={styles.cancelBtnText}>Cancel</Text>
+          <TouchableOpacity style={[styles.btn, styles.cancel]} onPress={() => navigation.goBack()}>
+            <Text style={styles.btnText}>Cancel</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.saveBtn} onPress={handleSave}>
-            <Text style={styles.saveBtnText}>Save</Text>
+          <TouchableOpacity style={[styles.btn, styles.save]} onPress={handleSave}>
+            <Text style={styles.btnText}>Save</Text>
           </TouchableOpacity>
         </View>
       </ScrollView>
+      
       {/* BOTTOM NAVIGATION */}
-      <View style={styles.bottomNav}>
-        <TouchableOpacity style={styles.navIcon} onPress={() => navigation.navigate('History')}>
-          <Image source={require('../assets/history.png')} style={styles.navImg} />
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.navIcon} onPress={() => navigation.navigate('Announcement')}>
-          <Image source={require('../assets/announcement.png')} style={styles.navImg} />
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.navIcon} onPress={() => navigation.navigate('Dashboard')}>
-          <Image source={require('../assets/home.png')} style={styles.navImg} />
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.navIcon} onPress={() => navigation.navigate('Report')}>
-          <Image source={require('../assets/report.png')} style={styles.navImg} />
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.navIcon} onPress={() => navigation.navigate('Notification')}>
-          <Image source={require('../assets/notification.png')} style={styles.navImg} />
-        </TouchableOpacity>
-      </View>
+      <BottomNav navigation={navigation} />
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    backgroundColor: '#1041BC',
-    paddingTop: 40,
-    paddingHorizontal: 16,
-    paddingBottom: 16,
-    borderBottomWidth: 1,
-    borderBottomColor: '#eee',
-  },
-  headerLeft: {
+  editProfileContainer: {
     flex: 1,
+    backgroundColor: '#f7f8fa',
+    position: 'relative',
   },
-  accountButton: {
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  avatar: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    borderColor: '#eee',
+  scrollContainer: {
+    flex: 1,
+    paddingBottom: 140,
   },
   titleRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginTop: 10,
+    marginTop: 20,
     marginBottom: 18,
-    marginLeft: 12,
+    marginHorizontal: 16,
   },
   backButton: {
     marginRight: 8,
@@ -181,35 +156,55 @@ const styles = StyleSheet.create({
     fontSize: 22,
     fontWeight: 'bold',
     color: '#222',
+    margin: 0,
   },
   avatarCard: {
     backgroundColor: '#fff',
-    borderRadius: 12,
+    borderRadius: 16,
     borderWidth: 1,
     borderColor: '#b3c6e0',
     marginHorizontal: 16,
-    marginBottom: 18,
-    padding: 18,
+    marginBottom: 20,
+    padding: 24,
     alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
   },
   profileAvatar: {
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+    marginBottom: 12,
+    backgroundColor: '#f8f9fa',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 3,
+    borderColor: '#e9ecef',
+  },
+  avatarImage: {
     width: 90,
     height: 90,
     borderRadius: 45,
-    marginBottom: 8,
   },
   profileName: {
     fontWeight: 'bold',
     fontSize: 18,
     marginBottom: 8,
     color: '#222',
+    margin: 0,
   },
   changePhotoBtn: {
     backgroundColor: '#1041BC',
-    borderRadius: 8,
-    paddingHorizontal: 14,
-    paddingVertical: 6,
-    marginTop: 4,
+    borderRadius: 10,
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    marginTop: 8,
   },
   changePhotoText: {
     color: '#fff',
@@ -218,7 +213,7 @@ const styles = StyleSheet.create({
   },
   formGroup: {
     marginHorizontal: 16,
-    marginBottom: 18,
+    marginBottom: 20,
   },
   label: {
     fontWeight: 'bold',
@@ -228,22 +223,22 @@ const styles = StyleSheet.create({
   },
   input: {
     backgroundColor: '#fff',
-    borderRadius: 8,
+    borderRadius: 10,
     borderWidth: 1,
     borderColor: '#d1d5db',
-    marginBottom: 12,
-    paddingVertical: 10,
-    paddingHorizontal: 12,
+    marginBottom: 14,
+    paddingVertical: 14,
+    paddingHorizontal: 16,
     fontSize: 15,
   },
   inputDisabled: {
     backgroundColor: '#eee',
-    borderRadius: 8,
+    borderRadius: 10,
     borderWidth: 1,
     borderColor: '#d1d5db',
     marginBottom: 2,
-    paddingVertical: 10,
-    paddingHorizontal: 12,
+    paddingVertical: 14,
+    paddingHorizontal: 16,
     fontSize: 15,
     color: '#888',
   },
@@ -252,61 +247,60 @@ const styles = StyleSheet.create({
     fontSize: 12,
     marginBottom: 10,
     marginLeft: 2,
+    margin: 0,
+  },
+  phoneAgeRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  phoneField: {
+    flex: 1,
+    marginRight: 8,
+  },
+  ageField: {
+    flex: 0.3,
   },
   buttonRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginHorizontal: 16,
-    marginTop: 8,
+    marginTop: 20,
+    marginBottom: 50,
   },
-  cancelBtn: {
-    backgroundColor: '#888',
+  btn: {
     borderRadius: 8,
-    paddingHorizontal: 36,
-    paddingVertical: 12,
-  },
-  cancelBtnText: {
-    color: '#fff',
-    fontWeight: 'bold',
-    fontSize: 17,
-  },
-  saveBtn: {
-    backgroundColor: '#1041BC',
-    borderRadius: 8,
-    paddingHorizontal: 36,
-    paddingVertical: 12,
-  },
-  saveBtnText: {
-    color: '#fff',
-    fontWeight: 'bold',
-    fontSize: 17,
-  },
-  bottomNav: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    alignItems: 'center',
-    backgroundColor: '#1041BC',
-    borderTopLeftRadius: 18,
-    borderTopRightRadius: 18,
-    height: 60,
-    borderTopWidth: 1,
-    borderTopColor: '#eee',
-    position: 'absolute',
-    left: 0,
-    right: 0,
-    bottom: 0,
-    paddingHorizontal: 16,
-    zIndex: 10,
-  },
-  navIcon: {
+    paddingHorizontal: 24,
+    paddingVertical: 14,
+    minWidth: 100,
     alignItems: 'center',
     justifyContent: 'center',
-    flex: 1,
   },
-  navImg: {
-    width: 24,
-    height: 24,
-    resizeMode: 'contain',
+  btnText: {
+    color: '#fff',
+    fontWeight: 'bold',
+    fontSize: 16,
+  },
+  save: {
+    backgroundColor: '#1041BC',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 4,
+  },
+  cancel: {
+    backgroundColor: '#e53935',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 4,
   },
 });
 
