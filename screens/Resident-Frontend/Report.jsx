@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image, ScrollView } from 'react-native';
-import Header from '../Components/ResidentHeader/Header';
-import BottomNav from '../Components/ResidentHeader/BottomNav';
+import Header from '../Components/ResidentComponents/Header';
+import BottomNav from '../Components/ResidentComponents/BottomNav';
 
 const Report = ({ navigation }) => {
   const backButtonImg = require('../../assets/backbutton.png');
@@ -89,10 +89,10 @@ const styles = StyleSheet.create({
   titleRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginTop: 20,
-    marginBottom: 16,
+    marginTop: 10,
+    marginBottom: 8,
     marginHorizontal: 16,
-    paddingTop: 20,
+    paddingTop: 10,
   },
   backButton: {
     marginRight: 8,
@@ -104,7 +104,7 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
   },
   title: {
-    fontSize: 20,
+    fontSize: 22,
     fontWeight: 'bold',
     color: '#222',
     margin: 0,

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image, ScrollView, TextInput } from 'react-native';
-import Header from '../Components/ResidentHeader/Header';
-import BottomNav from '../Components/ResidentHeader/BottomNav';
+import Header from '../Components/ResidentComponents/Header';
+import BottomNav from '../Components/ResidentComponents/BottomNav';
 
 const WitnessReport = ({ navigation, route }) => {
   const backButtonImg = require('../../assets/backbutton.png');
@@ -93,10 +93,10 @@ const styles = StyleSheet.create({
   titleContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginTop: 20,
-    marginBottom: 16,
+    marginTop: 10,
+    marginBottom: 8,
     marginHorizontal: 16,
-    paddingTop: 20,
+    paddingTop: 10,
   },
   backButton: {
     marginRight: 8,
@@ -174,10 +174,11 @@ const styles = StyleSheet.create({
   },
   submitButton: {
     backgroundColor: '#e53935',
-    borderRadius: 12,
-    marginHorizontal: 16,
-    marginVertical: 20,
-    height: 50,
+    borderRadius: 10,
+    alignSelf: 'center',
+    width: '50%',
+    marginVertical: 16,
+    height: 44,
     alignItems: 'center',
     justifyContent: 'center',
   },

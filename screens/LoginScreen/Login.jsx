@@ -52,13 +52,31 @@ export default function Login({ navigation }) {
       
       // Simple frontend-only login logic
       if (formData.email && formData.password) {
+        // Validate role from email patterns
+        const emailLower = String(formData.email).toLowerCase();
+        const responderPatterns = [/@responder\./i, /\bresponder\b/i];
+        const residentPatterns = [/@resident\./i, /\bresident\b/i];
+
+        const isResponder = responderPatterns.some((rx) => rx.test(emailLower));
+        const isResident = residentPatterns.some((rx) => rx.test(emailLower));
+
+        if (!isResponder && !isResident) {
+          Alert.alert(
+            'Invalid Email',
+            'Please use a registered Resident or Responder email address.',
+            [{ text: 'OK' }]
+          );
+          return;
+        }
+
+        const targetRoute = isResponder ? 'ResponderDashboard' : 'Dashboard';
         Alert.alert(
           'Login Successful',
           'Welcome! You have successfully logged in.',
           [
             {
               text: 'OK',
-              onPress: () => navigation.navigate('Dashboard')
+              onPress: () => navigation.navigate(targetRoute)
             }
           ]
         );
@@ -101,6 +119,8 @@ export default function Login({ navigation }) {
               )}
             </View>
           ))}
+
+          {/* Role derived automatically from email (no extra UI) */}
 
           {ACTION_BUTTONS.login.map((button) => (
             <TouchableOpacity
@@ -281,5 +301,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     lineHeight: 16,
   },
+  
 });
 

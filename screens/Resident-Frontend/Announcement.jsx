@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image, ScrollView } from 'react-native';
-import Header from '../Components/ResidentHeader/Header';
-import BottomNav from '../Components/ResidentHeader/BottomNav';
+import Header from '../Components/ResidentComponents/Header';
+import BottomNav from '../Components/ResidentComponents/BottomNav';
 
 const Announcement = ({ navigation }) => {
   const backButtonImg = require('../../assets/backbutton.png');

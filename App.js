@@ -17,6 +17,13 @@ import Waiting from './screens/Resident-Frontend/Waiting';
 import Arrived from './screens/Resident-Frontend/Arrived';
 import Complete from './screens/Resident-Frontend/Complete';
 import EmergencyTips from './screens/Resident-Frontend/EmergencyTips';
+// Responder screens
+import ResponderDashboard from './screens/Responder-Frontend/ResponderDashboard';
+import ResponderEditProfile from './screens/Responder-Frontend/ResponderEditProfile';
+import ResponderNotification from './screens/Responder-Frontend/ResponderNotification';
+import ResponderProfile from './screens/Responder-Frontend/ResponderProfile';
+import ResponderReports from './screens/Responder-Frontend/ResponderReports';
+import ResponderViewReport from './screens/Responder-Frontend/ResponderViewReport';
 import { NAVIGATION_CONFIG } from './utils/formConfig';
 
 export default function App() {
@@ -38,7 +45,14 @@ export default function App() {
     'Waiting': Waiting,
     'Arrived': Arrived,
     'Complete': Complete,
-    'EmergencyTips': EmergencyTips
+    'EmergencyTips': EmergencyTips,
+    // Responder mappings
+    'ResponderDashboard': ResponderDashboard,
+    'ResponderEditProfile': ResponderEditProfile,
+    'ResponderNotification': ResponderNotification,
+    'ResponderProfile': ResponderProfile,
+    'ResponderReports': ResponderReports,
+    'ResponderViewReport': ResponderViewReport
   };
 
   return (

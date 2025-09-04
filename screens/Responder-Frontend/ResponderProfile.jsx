@@ -1,12 +1,9 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image, ScrollView, Alert, TextInput } from 'react-native';
-import Header from '../Components/ResidentHeader/Header';
-import BottomNav from '../Components/ResidentHeader/BottomNav';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, TextInput, Alert, Image } from 'react-native';
+import NewHeader from '../Components/ResponderComponents/NewHeader';
+import NewBottomNav from '../Components/ResponderComponents/NewBottomNav';
 
-const Profile = ({ navigation }) => {
-  const backButtonImg = require('../../assets/backbutton.png');
-
-  // State for toggling password form
+const ResponderProfile = ({ navigation }) => {
   const [showPasswordForm, setShowPasswordForm] = useState(false);
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
@@ -23,13 +20,11 @@ const Profile = ({ navigation }) => {
     );
   };
 
-  // Placeholder handler for password update (backend ready)
   const handlePasswordUpdate = () => {
     if (newPassword !== confirmPassword) {
       Alert.alert('Error', 'Passwords do not match');
       return;
     }
-    // TODO: Integrate with backend
     Alert.alert('Success', 'Password updated!');
     setShowPasswordForm(false);
     setCurrentPassword('');
@@ -40,34 +35,35 @@ const Profile = ({ navigation }) => {
   return (
     <View style={styles.profileContainer}>
       {/* Header */}
-      <Header navigation={navigation} />
-      
-      <View style={styles.titleContainer}>
-        <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
-          <Image source={backButtonImg} style={styles.backButtonIcon} />
-        </TouchableOpacity>
-        <Text style={styles.title}>Profile</Text>
-      </View>
-      
-      <ScrollView style={styles.scrollContainer} showsVerticalScrollIndicator={false}>
-        {/* First Container: Avatar, Name, Edit Profile */}
+      <NewHeader navigation={navigation} />
+
+      <ScrollView style={styles.scrollContainer} contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false} keyboardShouldPersistTaps="handled">
+        {/* Title Row */}
+        <View style={styles.profileTitleRow}>
+          <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
+            <Image source={require('../../assets/backbutton.png')} style={styles.backButtonImg} />
+          </TouchableOpacity>
+          <Text style={styles.profileTitle}>Profile</Text>
+        </View>
+
+        {/* Top Container: Avatar, Name, Edit Profile */}
         <View style={styles.topContainer}>
           <View style={styles.profileAvatar}>
-            <Text style={styles.avatarText}>👤</Text>
+            <Text style={styles.avatarEmoji}>👤</Text>
           </View>
           <Text style={styles.profileName}>User Name</Text>
-          <TouchableOpacity onPress={() => navigation.navigate('EditProfile')}>
+          <TouchableOpacity onPress={() => navigation.navigate('ResponderEditProfile')}>
             <Text style={styles.editProfileText}>Edit Profile</Text>
           </TouchableOpacity>
         </View>
-        
-        {/* Second Container: Basic Information or Password Form */}
+
+        {/* Info Container */}
         <View style={styles.infoContainer}>
           <View style={styles.infoHeader}>
             <Text style={styles.infoHeaderIcon}>i</Text>
             <Text style={styles.infoHeaderText}> Basic Information</Text>
           </View>
-          
+
           {!showPasswordForm ? (
             <View style={styles.infoContent}>
               <View style={styles.infoRow}>
@@ -75,11 +71,15 @@ const Profile = ({ navigation }) => {
                 <Text style={styles.infoValue}>-</Text>
               </View>
               <View style={styles.infoRow}>
-                <Text style={styles.infoLabel}>Address:</Text>
+                <Text style={styles.infoLabel}>Role:</Text>
                 <Text style={styles.infoValue}>-</Text>
               </View>
               <View style={styles.infoRow}>
-                <Text style={styles.infoLabel}>User ID:</Text>
+                <Text style={styles.infoLabel}>Team:</Text>
+                <Text style={styles.infoValue}>-</Text>
+              </View>
+              <View style={styles.infoRow}>
+                <Text style={styles.infoLabel}>Emp ID:</Text>
                 <Text style={styles.infoValue}>-</Text>
               </View>
               <View style={styles.infoRow}>
@@ -88,10 +88,6 @@ const Profile = ({ navigation }) => {
               </View>
               <View style={styles.infoRow}>
                 <Text style={styles.infoLabel}>Phone:</Text>
-                <Text style={styles.infoValue}>-</Text>
-              </View>
-              <View style={styles.infoRow}>
-                <Text style={styles.infoLabel}>Age:</Text>
                 <Text style={styles.infoValue}>-</Text>
               </View>
             </View>
@@ -134,8 +130,8 @@ const Profile = ({ navigation }) => {
             </View>
           )}
         </View>
-        
-        {/* Show Change Password and Logout buttons only when not in password form */}
+
+        {/* Action Buttons */}
         {!showPasswordForm && (
           <View style={styles.actionButtons}>
             <TouchableOpacity style={styles.changePasswordBtn} onPress={() => setShowPasswordForm(true)}>
@@ -147,9 +143,9 @@ const Profile = ({ navigation }) => {
           </View>
         )}
       </ScrollView>
-      
+
       {/* Bottom Navigation */}
-      <BottomNav navigation={navigation} />
+      <NewBottomNav navigation={navigation} />
     </View>
   );
 };
@@ -158,38 +154,46 @@ const styles = StyleSheet.create({
   profileContainer: {
     flex: 1,
     backgroundColor: '#f7f8fa',
+    minHeight: '100%',
     position: 'relative',
   },
-  titleContainer: {
+  profileTitleRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginTop: 20,
-    marginBottom: 16,
+    marginTop: 10,
+    marginBottom: 8,
     marginLeft: 16,
+    paddingTop: 10,
   },
   backButton: {
     marginRight: 8,
     padding: 4,
   },
   backButtonIcon: {
+    fontSize: 28,
+    color: '#222',
+  },
+  backButtonImg: {
     width: 28,
     height: 28,
     resizeMode: 'contain',
   },
-  title: {
+  profileTitle: {
     fontSize: 24,
     fontWeight: 'bold',
     color: '#111',
     margin: 0,
   },
   scrollContainer: {
-    flex: 1,
-    paddingBottom: 90,
+    paddingBottom: 0,
+  },
+  scrollContent: {
+    paddingBottom: 120,
   },
   topContainer: {
     backgroundColor: '#fff',
     marginHorizontal: 16,
-    marginTop: 8,
+    marginTop: 12,
     borderRadius: 10,
     padding: 20,
     alignItems: 'center',
@@ -207,7 +211,7 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: '#eee',
   },
-  avatarText: {
+  avatarEmoji: {
     fontSize: 48,
   },
   profileName: {
@@ -226,7 +230,7 @@ const styles = StyleSheet.create({
   infoContainer: {
     backgroundColor: '#fff',
     marginHorizontal: 16,
-    marginTop: 18,
+    marginTop: 16,
     borderRadius: 10,
     padding: 18,
     borderWidth: 1,
@@ -256,7 +260,6 @@ const styles = StyleSheet.create({
     fontSize: 15,
   },
   infoContent: {
-    // Container for info rows
   },
   infoRow: {
     flexDirection: 'row',
@@ -336,7 +339,7 @@ const styles = StyleSheet.create({
   actionButtons: {
     marginHorizontal: 16,
     marginTop: 24,
-    marginBottom: 24,
+    marginBottom: 120,
   },
   changePasswordBtn: {
     backgroundColor: '#2ecc40',
@@ -363,4 +366,6 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Profile; 
+export default ResponderProfile;
+
+

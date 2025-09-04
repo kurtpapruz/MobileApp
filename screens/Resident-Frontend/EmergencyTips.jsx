@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView, ActivityIndicator, Image } from 'react-native';
-import Header from '../Components/ResidentHeader/Header';
-import BottomNav from '../Components/ResidentHeader/BottomNav';
+import Header from '../Components/ResidentComponents/Header';
+import BottomNav from '../Components/ResidentComponents/BottomNav';
 
 const EmergencyTips = ({ navigation }) => {
   const [selectedIncidentType, setSelectedIncidentType] = useState('');
@@ -51,9 +51,7 @@ const EmergencyTips = ({ navigation }) => {
       
       // Mock data for demonstration - remove this when backend is ready
       const mockTip = {
-        title: 'What To Do If Your Clothes Catch Fire',
-        imageUrl: 'https://example.com/fire-safety-guide.jpg', // Replace with actual image URL
-        description: 'Emergency guide for fire safety procedures'
+      
       };
       setCurrentTip(mockTip);
     } catch (error) {
@@ -101,28 +99,24 @@ const EmergencyTips = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      {/* Top Header with "First aid page" */}
-      <View style={styles.topHeader}>
-        <Text style={styles.topHeaderText}>First aid page</Text>
-      </View>
-
+    
       {/* Main Header with Profile */}
       <Header navigation={navigation} />
 
       {/* Main Content */}
       <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
-        {/* Emergency Tips Section */}
-        <View style={styles.emergencyTipsSection}>
-          <View style={styles.emergencyTipsHeader}>
-            <TouchableOpacity onPress={() => navigation.goBack()}>
-              <Text style={styles.backArrow}>←</Text>
-            </TouchableOpacity>
-            <Text style={styles.emergencyTipsTitle}>Emergency Tips</Text>
-          </View>
+        {/* Header row above container */}
+        <View style={styles.emergencyTipsHeader}>
+          <TouchableOpacity onPress={() => navigation.goBack()}>
+            <Image source={require('../../assets/backbutton.png')} style={styles.backButtonImg} />
+          </TouchableOpacity>
+          <Text style={styles.emergencyTipsTitle}>Emergency Tips</Text>
+        </View>
 
-          {/* Incident Type Selector */}
-          <View style={styles.incidentTypeSection}>
-            <Text style={styles.incidentTypeLabel}>Incident Type</Text>
+        {/* Incident Type Selector above container */}
+        <View style={styles.incidentTypeSection}>
+          <Text style={styles.incidentTypeLabel}>Incident Type</Text>
+          <View style={styles.dropdownWrap}>
             <TouchableOpacity 
               style={styles.dropdownContainer}
               onPress={() => setShowDropdown(!showDropdown)}
@@ -134,7 +128,7 @@ const EmergencyTips = ({ navigation }) => {
               <Text style={styles.dropdownIcon}>▼</Text>
             </TouchableOpacity>
 
-            {/* Dropdown Options */}
+            {/* Dropdown Options (overlay) */}
             {showDropdown && incidentTypes.length > 0 && (
               <View style={styles.dropdownOptions}>
                 {incidentTypes.map((type) => (
@@ -149,8 +143,10 @@ const EmergencyTips = ({ navigation }) => {
               </View>
             )}
           </View>
+        </View>
 
-          {/* Emergency Tip Content */}
+        {/* Container with image only */}
+        <View style={styles.emergencyTipsSection}>
           {isLoading ? (
             <View style={styles.loadingContainer}>
               <ActivityIndicator size="large" color="#ff8c00" />
@@ -158,12 +154,6 @@ const EmergencyTips = ({ navigation }) => {
             </View>
           ) : currentTip ? (
             <View style={styles.infographicContainer}>
-              <View style={styles.infographicHeader}>
-                <Text style={styles.infographicTitle}>
-                  {currentTip.title}
-                </Text>
-              </View>
-
               {/* Image Container/Placeholder */}
               <View style={styles.imageContainer}>
                 {currentTip.imageUrl ? (
@@ -178,11 +168,7 @@ const EmergencyTips = ({ navigation }) => {
                   />
                 ) : (
                   <View style={styles.imagePlaceholder}>
-                    <Text style={styles.placeholderText}>📋</Text>
                     <Text style={styles.placeholderSubtext}>Emergency Guide Image</Text>
-                    <Text style={styles.placeholderDescription}>
-                      {currentTip.description || 'Emergency tips guide will be displayed here'}
-                    </Text>
                   </View>
                 )}
               </View>
@@ -234,18 +220,22 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 20,
   },
-  backArrow: {
-    fontSize: 24,
+  backButtonImg: {
+    width: 28,
+    height: 28,
+    resizeMode: 'contain',
     marginRight: 8,
-    color: '#333',
   },
   emergencyTipsTitle: {
-    fontSize: 18,
+    fontSize: 22,
     fontWeight: 'bold',
     color: '#333',
   },
   incidentTypeSection: {
     marginBottom: 24,
+  },
+  dropdownWrap: {
+    position: 'relative',
   },
   incidentTypeLabel: {
     fontSize: 16,
@@ -273,16 +263,20 @@ const styles = StyleSheet.create({
     color: '#666',
   },
   dropdownOptions: {
+    position: 'absolute',
+    top: 52,
+    left: 0,
+    right: 0,
     backgroundColor: 'white',
     borderWidth: 1,
     borderColor: '#ddd',
     borderRadius: 8,
-    marginTop: 4,
     elevation: 3,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
+    zIndex: 100,
   },
   dropdownOption: {
     paddingHorizontal: 12,
@@ -336,11 +330,9 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   infographicContainer: {
-    backgroundColor: '#ff8c00',
+    backgroundColor: '#fff',
     borderRadius: 12,
-    padding: 20,
-    borderWidth: 1,
-    borderColor: '#000',
+    padding: 16,
   },
   infographicHeader: {
     alignItems: 'center',
@@ -366,13 +358,10 @@ const styles = StyleSheet.create({
   imagePlaceholder: {
     width: '100%',
     height: 300,
-    backgroundColor: 'white',
+    backgroundColor: '#fff',
     borderRadius: 8,
     alignItems: 'center',
     justifyContent: 'center',
-    borderWidth: 2,
-    borderColor: '#ddd',
-    borderStyle: 'dashed',
   },
   placeholderText: {
     fontSize: 48,

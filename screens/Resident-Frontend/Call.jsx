@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image, Alert } from 'react-native';
-import Header from '../Components/ResidentHeader/Header';
-import BottomNav from '../Components/ResidentHeader/BottomNav';
+// Header and BottomNav intentionally omitted in this layout
 
 const Call = ({ navigation, route }) => {
   const [incidentType, setIncidentType] = useState(route?.params?.incidentType || '');
@@ -235,7 +234,7 @@ const Call = ({ navigation, route }) => {
 
           {/* Call Info */}
           <View style={styles.callInfo}>
-            <Text style={styles.callerName}>Responder</Text>
+            <Text style={styles.callerName}>MDRRMO</Text>
             {callStatus === 'connected' && (
               <Text style={styles.callDuration}>{formatTime(callDuration)}</Text>
             )}
@@ -247,127 +246,30 @@ const Call = ({ navigation, route }) => {
             )}
           </View>
 
-          {/* Call Controls Grid */}
+          {/* Call Controls - only End Call */}
           <View style={styles.callControls}>
-            {/* Top Row */}
-            <View style={styles.controlRow}>
-              <TouchableOpacity 
-                style={[styles.controlButton, isMuted && styles.controlButtonActive]}
-                onPress={handleMuteToggle}
-                disabled={callStatus !== 'connected'}
-              >
-                <View style={styles.controlIcon}>
-                  <Image 
-                    source={require('../../assets/mute.png')} 
-                    style={styles.controlImage}
-                    resizeMode="contain"
-                  />
-                </View>
-                <Text style={styles.controlLabel}>Mute</Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity 
-                style={[styles.controlButton, isVideoEnabled && styles.controlButtonActive]}
-                onPress={handleVideoToggle}
-                disabled={callStatus !== 'connected'}
-              >
-                <View style={styles.controlIcon}>
-                  <Image 
-                    source={require('../../assets/video.png')} 
-                    style={styles.controlImage}
-                    resizeMode="contain"
-                  />
-                </View>
-                <Text style={styles.controlLabel}>Video Call</Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity 
-                style={[styles.controlButton, isSpeakerOn && styles.controlButtonActive]}
-                onPress={handleSpeakerToggle}
-                disabled={callStatus !== 'connected'}
-              >
-                <View style={styles.controlIcon}>
-                  <Image 
-                    source={require('../../assets/speaker.png')} 
-                    style={styles.controlImage}
-                    resizeMode="contain"
-                  />
-                </View>
-                <Text style={styles.controlLabel}>Speaker</Text>
-              </TouchableOpacity>
-            </View>
-
-            {/* Middle Row */}
-            <View style={styles.controlRow}>
-              <TouchableOpacity 
-                style={styles.controlButton}
-                onPress={handleAddCall}
-                disabled={callStatus !== 'connected'}
-              >
-                <View style={styles.controlIcon}>
-                  <Image 
-                    source={require('../../assets/add.png')} 
-                    style={styles.controlImage}
-                    resizeMode="contain"
-                  />
-                </View>
-                <Text style={styles.controlLabel}>Add Call</Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity 
-                style={styles.controlButton}
-                onPress={handleKeypad}
-                disabled={callStatus !== 'connected'}
-              >
-                <View style={styles.controlIcon}>
-                  <Image 
-                    source={require('../../assets/keypad.png')} 
-                    style={styles.controlImage}
-                    resizeMode="contain"
-                  />
-                </View>
-                <Text style={styles.controlLabel}>Keypad</Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity 
-                style={[styles.controlButton, isOnHold && styles.controlButtonActive]}
-                onPress={handleHold}
-                disabled={callStatus !== 'connected'}
-              >
-                <View style={styles.controlIcon}>
-                  <Image 
-                    source={require('../../assets/hold.png')} 
-                    style={styles.controlImage}
-                    resizeMode="contain"
-                  />
-                </View>
-                <Text style={styles.controlLabel}>Hold</Text>
-              </TouchableOpacity>
-            </View>
-
-            {/* Bottom Row - End Call */}
-            <View style={styles.controlRow}>
-              <TouchableOpacity 
-                style={[styles.controlButton, styles.endCallButton]}
-                onPress={callStatus === 'idle' ? handleStartCall : handleEndCallClick}
-              >
-                <View style={styles.controlIcon}>
+            <View style={styles.singleControlRow}>
+              <View style={styles.endCallWrapper}>
+                <TouchableOpacity 
+                  style={[styles.endCallButton]}
+                  onPress={callStatus === 'idle' ? handleStartCall : handleEndCallClick}
+                >
                   <Image 
                     source={require('../../assets/endcall.png')} 
                     style={styles.controlImage}
                     resizeMode="contain"
                   />
-                </View>
+                </TouchableOpacity>
                 <Text style={styles.controlLabel}>
                   {callStatus === 'idle' ? 'Start Call' : 'End Call'}
                 </Text>
-              </TouchableOpacity>
+              </View>
             </View>
           </View>
         </View>
       </View>
 
-      {/* Confirmation dialog removed */}
+  
     </View>
   );
 };
@@ -400,13 +302,13 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   menuDots: {
-    color: 'white',
+    color: '#e53935',
     fontSize: 28,
     fontWeight: 'bold',
   },
   callInfo: {
     alignItems: 'center',
-    marginBottom: 30,
+    marginBottom: 200,
   },
   callerName: {
     fontSize: 36,
@@ -416,7 +318,7 @@ const styles = StyleSheet.create({
   },
   callDuration: {
     fontSize: 20,
-    color: '#e3f2fd',
+    color: '#e3f2fd', 
     fontFamily: 'monospace',
   },
   callStatusText: {
@@ -424,7 +326,7 @@ const styles = StyleSheet.create({
     color: '#e3f2fd',
     opacity: 0.8,
   },
-  callControls: {
+  callControls: { 
     width: '100%',
     gap: 30,
   },
@@ -432,6 +334,14 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-around',
     gap: 25,
+  },
+  singleControlRow: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+  },
+  endCallWrapper: {
+    alignItems: 'center',
+    marginTop: 20,
   },
   controlButton: {
     alignItems: 'center',
@@ -446,10 +356,12 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(255, 255, 255, 0.3)',
   },
   endCallButton: {
-    backgroundColor: '#f44336',
-    width: 90,
-    height: 90,
-    padding: 10,
+    backgroundColor: '#d6dbe6',
+    width: 72,
+    height: 72,
+    borderRadius: 36,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   controlIcon: {
     width: 36,
@@ -457,19 +369,19 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: 18,
-    marginTop: 4,
+    marginTop: 0,
   },
   controlImage: {
-    width: 24,
-    height: 24,
+    width: 26,
+    height: 26,
   },
   controlLabel: {
-    fontSize: 11,
+    fontSize: 12,
     fontWeight: '500',
     textAlign: 'center',
     color: 'white',
-    lineHeight: 12,
-    marginBottom: 2,
+    lineHeight: 14,
+    marginTop: 10,
   },
 });
 

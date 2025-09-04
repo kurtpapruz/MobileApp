@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { View, Text, StyleSheet, Animated } from 'react-native';
-import Header from '../Components/ResidentHeader/Header';
-import BottomNav from '../Components/ResidentHeader/BottomNav';
+import Header from '../Components/ResidentComponents/Header';
+import BottomNav from '../Components/ResidentComponents/BottomNav';
 
 function Complete({ navigation, route }) {
   const pulseAnim = useRef(new Animated.Value(1)).current;

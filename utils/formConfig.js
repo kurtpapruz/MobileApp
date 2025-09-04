@@ -270,6 +270,37 @@ export const NAVIGATION_CONFIG = {
         title: 'Login'
       }
     },
+    // Responder screens
+    {
+      name: 'ResponderDashboard',
+      component: 'ResponderDashboard',
+      options: { title: 'Responder Dashboard' }
+    },
+    {
+      name: 'ResponderEditProfile',
+      component: 'ResponderEditProfile',
+      options: { title: 'Responder Edit Profile' }
+    },
+    {
+      name: 'ResponderNotification',
+      component: 'ResponderNotification',
+      options: { title: 'Responder Notification' }
+    },
+    {
+      name: 'ResponderProfile',
+      component: 'ResponderProfile',
+      options: { title: 'Responder Profile' }
+    },
+    {
+      name: 'ResponderReports',
+      component: 'ResponderReports',
+      options: { title: 'Responder Reports' }
+    },
+    {
+      name: 'ResponderViewReport',
+      component: 'ResponderViewReport',
+      options: { title: 'Report Details' }
+    },
     {
       name: 'Registration',
       component: 'Registration',

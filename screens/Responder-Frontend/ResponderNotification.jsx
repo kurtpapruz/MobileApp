@@ -1,38 +1,30 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image, ScrollView } from 'react-native';
-import Header from '../Components/ResidentHeader/Header';
-import BottomNav from '../Components/ResidentHeader/BottomNav';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image } from 'react-native';
+import NewHeader from '../Components/ResponderComponents/NewHeader';
+import NewBottomNav from '../Components/ResponderComponents/NewBottomNav';
 
-const Notification = ({ navigation, notifications = [] }) => {
-  const backButtonImg = require('../../assets/backbutton.png');
-
+const ResponderNotification = ({ navigation, notifications = [] }) => {
   return (
     <View style={styles.notificationContainer}>
       {/* Header */}
-      <Header navigation={navigation} />
-      
+      <NewHeader navigation={navigation} />
+
+      {/* Title Row */}
       <View style={styles.titleContainer}>
         <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
-          <Image source={backButtonImg} style={styles.backButtonIcon} />
+          <Image source={require('../../assets/backbutton.png')} style={styles.backButtonImg} />
         </TouchableOpacity>
         <Text style={styles.title}>Notification</Text>
       </View>
-      
+
       {/* Notification container */}
       <ScrollView style={styles.scrollContainer} showsVerticalScrollIndicator={false}>
         <View style={styles.container}>
           {notifications.length > 0 ? (
             <View style={styles.notificationsList}>
-              {notifications.map((item, index) => (
-                <View 
-                  key={item.id} 
-                  style={[
-                    styles.notificationItem,
-                    index === notifications.length - 1 && styles.notificationItemLast
-                  ]}
-                >
+              {notifications.map((item) => (
+                <View style={styles.notificationItem} key={item.id}>
                   <Text style={styles.notificationText}>{item.message}</Text>
-                  <Text style={styles.notificationTime}>{item.time}</Text>
                 </View>
               ))}
             </View>
@@ -41,16 +33,16 @@ const Notification = ({ navigation, notifications = [] }) => {
           )}
         </View>
       </ScrollView>
-      
+
       {/* Bottom Navigation */}
-      <BottomNav navigation={navigation} />
+      <NewBottomNav navigation={navigation} />
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   notificationContainer: {
-    backgroundColor: '#f7f8fa',
+    backgroundColor: '#f5f5f5',
     minHeight: '100%',
     position: 'relative',
   },
@@ -59,22 +51,36 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: 10,
     marginBottom: 8,
-    marginLeft: 12,
+    marginHorizontal: 16,
+    paddingTop: 10,
   },
   backButton: {
+    backgroundColor: '#fff',
+    borderRadius: 20,
+    width: 40,
+    height: 40,
+    alignItems: 'center',
+    justifyContent: 'center',
     marginRight: 8,
-    padding: 4,
+    shadowColor: '#000',
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    shadowOffset: { width: 0, height: 2 },
+    elevation: 2,
   },
   backButtonIcon: {
+    fontSize: 24,
+    color: '#333',
+  },
+  backButtonImg: {
     width: 28,
     height: 28,
     resizeMode: 'contain',
   },
   title: {
-    fontSize: 20,
+    fontSize: 22,
     fontWeight: 'bold',
     color: '#222',
-    margin: 0,
   },
   scrollContainer: {
     paddingBottom: 120,
@@ -100,19 +106,10 @@ const styles = StyleSheet.create({
     borderBottomColor: '#eee',
     paddingVertical: 10,
   },
-  notificationItemLast: {
-    borderBottomWidth: 0,
-  },
   notificationText: {
     fontSize: 15,
     color: '#222',
     marginBottom: 2,
-    margin: 0,
-  },
-  notificationTime: {
-    fontSize: 12,
-    color: '#888',
-    textAlign: 'right',
     margin: 0,
   },
   emptyText: {
@@ -124,4 +121,6 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Notification; 
+export default ResponderNotification;
+
+

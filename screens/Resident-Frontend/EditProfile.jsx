@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image, ScrollView, TextInput, Dimensions } from 'react-native';
-import Header from '../Components/ResidentHeader/Header';
-import BottomNav from '../Components/ResidentHeader/BottomNav';
+import Header from '../Components/ResidentComponents/Header';
+import BottomNav from '../Components/ResidentComponents/BottomNav';
 
 const { width } = Dimensions.get('window');
 
@@ -28,7 +28,7 @@ const EditProfile = ({ navigation }) => {
       {/* Header */}
       <Header navigation={navigation} />
       
-      <ScrollView style={styles.scrollContainer} showsVerticalScrollIndicator={true}>
+      <ScrollView style={styles.scrollContainer} contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={true} keyboardShouldPersistTaps="handled">
         {/* Title row with back button and Edit Profile text */}
         <View style={styles.titleRow}>
           <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
@@ -48,76 +48,79 @@ const EditProfile = ({ navigation }) => {
           </TouchableOpacity>
         </View>
         
-        {/* Form Fields */}
-        <View style={styles.formGroup}>
-          <Text style={styles.label}>Full Name:</Text>
-          <TextInput
-            style={styles.input}
-            value={fullName}
-            onChangeText={setFullName}
-            placeholder="Enter full name"
-          />
+        {/* Form Card (nested container like responder screen) */}
+        <View style={styles.formCard}>
+          <View style={styles.formGroup}>
+            <Text style={styles.label}>Full Name:</Text>
+            <TextInput
+              style={styles.input}
+              value={fullName}
+              onChangeText={setFullName}
+              placeholder="Enter full name"
+            />
 
-          <Text style={styles.label}>Address:</Text>
-          <TextInput
-            style={styles.input}
-            value={address}
-            onChangeText={setAddress}
-            placeholder="Enter address"
-          />
+            <Text style={styles.label}>Address:</Text>
+            <TextInput
+              style={styles.input}
+              value={address}
+              onChangeText={setAddress}
+              placeholder="Enter address"
+            />
 
-          <Text style={styles.label}>User ID:</Text>
-          <TextInput
-            style={styles.inputDisabled}
-            value={userId}
-            editable={false}
-            placeholder="User ID"
-          />
-          <Text style={styles.inputNote}>User ID cannot be changed</Text>
+            <Text style={styles.label}>User ID:</Text>
+            <TextInput
+              style={styles.inputDisabled}
+              value={userId}
+              editable={false}
+              placeholder="User ID"
+            />
+            <Text style={styles.inputNote}>User ID cannot be changed</Text>
 
-          <Text style={styles.label}>Email:</Text>
-          <TextInput
-            style={styles.input}
-            value={email}
-            onChangeText={setEmail}
-            placeholder="Enter email"
-            keyboardType="email-address"
-            autoCapitalize="none"
-          />
+            <Text style={styles.label}>Email:</Text>
+            <TextInput
+              style={styles.input}
+              value={email}
+              onChangeText={setEmail}
+              placeholder="Enter email"
+              keyboardType="email-address"
+              autoCapitalize="none"
+            />
 
-          <View style={styles.phoneAgeRow}>
-            <View style={styles.phoneField}>
-              <Text style={styles.label}>Phone:</Text>
-              <TextInput
-                style={styles.input}
-                value={phone}
-                onChangeText={setPhone}
-                placeholder="Enter phone number"
-                keyboardType="phone-pad"
-              />
+            <View style={styles.phoneAgeRow}>
+              <View style={styles.phoneField}>
+                <Text style={styles.label}>Phone:</Text>
+                <TextInput
+                  style={styles.input}
+                  value={phone}
+                  onChangeText={setPhone}
+                  placeholder="Enter phone number"
+                  keyboardType="phone-pad"
+                />
+              </View>
+              <View style={styles.ageField}>
+                <Text style={styles.label}>Age:</Text>
+                <TextInput
+                  style={styles.input}
+                  value={age}
+                  onChangeText={setAge}
+                  placeholder="Age"
+                  keyboardType="numeric"
+                />
+              </View>
             </View>
-            <View style={styles.ageField}>
-              <Text style={styles.label}>Age:</Text>
-              <TextInput
-                style={styles.input}
-                value={age}
-                onChangeText={setAge}
-                placeholder="Age"
-                keyboardType="numeric"
-              />
-            </View>
+          </View>
+          {/* Buttons inside the form card */}
+          <View style={styles.buttonRowCard}>
+            <TouchableOpacity style={[styles.btn, styles.btnSmall, styles.cancel]} onPress={() => navigation.goBack()}>
+              <Text style={styles.btnText}>Cancel</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={[styles.btn, styles.btnSmall, styles.save]} onPress={handleSave}>
+              <Text style={styles.btnText}>Save</Text>
+            </TouchableOpacity>
           </View>
         </View>
         
-        {/* Buttons */}
-        <View style={styles.buttonRow}>
-          <TouchableOpacity style={[styles.btn, styles.cancel]} onPress={() => navigation.goBack()}>
-            <Text style={styles.btnText}>Cancel</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={[styles.btn, styles.save]} onPress={handleSave}>
-            <Text style={styles.btnText}>Save</Text>
-          </TouchableOpacity>
-        </View>
+        
       </ScrollView>
       
       {/* BOTTOM NAVIGATION */}
@@ -134,7 +137,9 @@ const styles = StyleSheet.create({
   },
   scrollContainer: {
     flex: 1,
-    paddingBottom: 140,
+  },
+  scrollContent: {
+    paddingBottom: 100,
   },
   titleRow: {
     flexDirection: 'row',
@@ -215,6 +220,15 @@ const styles = StyleSheet.create({
     marginHorizontal: 16,
     marginBottom: 20,
   },
+  formCard: {
+    backgroundColor: '#fff',
+    borderRadius: 16,
+    borderWidth: 1,
+    borderColor: '#b3c6e0',
+    marginHorizontal: 16,
+    marginBottom: 14,
+    padding: 16,
+  },
   label: {
     fontWeight: 'bold',
     fontSize: 15,
@@ -267,13 +281,23 @@ const styles = StyleSheet.create({
     marginTop: 20,
     marginBottom: 50,
   },
+  buttonRowCard: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 12,
+  },
   btn: {
     borderRadius: 8,
-    paddingHorizontal: 24,
-    paddingVertical: 14,
+    paddingHorizontal: 18,
+    paddingVertical: 12,
     minWidth: 100,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  btnSmall: {
+    minWidth: 0,
+    flex: 1,
+    marginHorizontal: 6,
   },
   btnText: {
     color: '#fff',
